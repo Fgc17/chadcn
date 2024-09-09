@@ -1,0 +1,52 @@
+{
+  "name": "chadcn",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {},
+  "forwardPorts": [5173],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode@9.14.0",
+        "PKief.material-icon-theme",
+        "bradlc.vscode-tailwindcss",
+        "GitHub.copilot",
+        "yoavbls.pretty-ts-errors",
+        "IronGeek.vscode-env",
+        "ms-vscode.vscode-typescript-next"
+      ],
+      "settings": {
+        "extensions.autoCheckUpdates": false,
+        "extensions.autoUpdate": false,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[prisma]": {
+          "editor.defaultFormatter": "Prisma.prisma-insider"
+        },
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        },
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": false,
+        "prettier.useEditorConfig": false,
+        "prettier.configPath": "./.prettierrc.js",
+        "prettier.prettierPath": "./node_modules/prettier",
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "eslint.workingDirectories": ["./"],
+        "explorer.compactFolders": false,
+        "typescript.preferences.importModuleSpecifier": "shortest",
+        "workbench.tree.indent": 20,
+        "tailwindCSS.experimental.classRegex": [
+          ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+          ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+        ]
+      }
+    }
+  }
+}
