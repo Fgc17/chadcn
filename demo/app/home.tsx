@@ -15,12 +15,14 @@ import {
   Fieldset,
   Label,
 } from "@/components/form/field";
+import { Radio, RadioGroup, RadioSlot } from "@/components/form/radio";
 
 const items = Array.from({ length: 50 }).map((_, i) => String(i));
 
 const { Field, schema } = bootstrapForm({
   email: z.string().email(),
   isUnderage: z.boolean(),
+  type: z.enum(["a", "b"]),
 });
 
 function Home() {
@@ -88,6 +90,22 @@ function Home() {
               <Label>Underage</Label>
               <Switch />
               <Description>Are you under 18 years old?</Description>
+            </Field>
+            <Field name="type">
+              <Label>Type</Label>
+              <RadioGroup>
+                <RadioSlot>
+                  <Radio color="green" value="a" />
+                  <Label>A</Label>
+                  <Description>Some description</Description>
+                </RadioSlot>
+                <RadioSlot>
+                  <Radio color="black" value="b" />
+                  <Label>B</Label>
+                  <Description>Some description</Description>
+                </RadioSlot>
+              </RadioGroup>
+              <Description>Select the type</Description>
             </Field>
           </FieldGroup>
         </Fieldset>
