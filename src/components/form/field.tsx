@@ -20,14 +20,6 @@ const fieldVariants = {
     "[&>[data-slot=control]+[data-slot=error]]:mt-1.5",
     "[&>[data-slot=label]]:font-medium"
   ),
-  radio: cn(
-    "[&>[data-slot=label]+[data-slot=control]]:mt-1.5",
-    "[&>[data-slot=label]+[data-slot=description]]:mt-1",
-    "[&>[data-slot=description]+[data-slot=control]]:mt-1.5",
-    "[&>[data-slot=control]+[data-slot=description]]:mt-1.5",
-    "[&>[data-slot=control]+[data-slot=error]]:mt-1.5",
-    "[&>[data-slot=label]]:font-medium"
-  ),
   switch: cn(
     "grid grid-cols-[1fr_auto]",
     "items-center gap-x-8 gap-y-1 sm:grid-cols-[1fr_auto]",
@@ -82,7 +74,7 @@ export function Legend({
       {...props}
       className={cn(
         className,
-        "text-base/6 font-semibold text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white"
+        "text-base/6 font-semibold text-zinc-950 data-[disabled]:opacity-50 dark:text-white sm:text-sm/6"
       )}
     />
   );
@@ -157,7 +149,7 @@ export function Label({
       {...props}
       data-slot="label"
       className={cn(
-        "group-data-[invalid]:text-destructive text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        "text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-data-[invalid]:text-destructive",
         className
       )}
     />
@@ -172,7 +164,7 @@ export function Description({
     <Headless.Description
       {...props}
       data-slot="description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-sm text-muted-foreground", className)}
     />
   );
 }

@@ -11,7 +11,6 @@ import { z, ZodEffects, ZodObject, ZodRawShape, ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParentFormGroup } from "./form-group";
 import * as PrimitiveForm from "@radix-ui/react-form";
-import { Slot, Slottable } from "@radix-ui/react-slot";
 
 export type OnSubmitFn<Fields extends FieldValues> = (data: Fields) => void;
 
