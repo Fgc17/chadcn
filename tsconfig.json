@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "chadcn",
+  "compilerOptions": {
+    /* Bundler Mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "incremental": false,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+
+    /* ES */
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "es6", "es7", "dom", "webworker"],
+
+    /* Linting */
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictPropertyInitialization": false,
+
+    /* Misc */
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "demo", "vite.config.js", "demo"]
+}
