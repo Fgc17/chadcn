@@ -184,8 +184,8 @@ export function Radio({
 }: RadioProps) {
   return (
     <Headless.Radio
-      data-slot="radio"
       {...props}
+      data-slot="radio"
       className={cn(className, "group inline-flex focus:outline-none")}
     >
       <span className={cn(radioVariants({ variant }), className)}>
