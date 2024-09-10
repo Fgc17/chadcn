@@ -126,7 +126,6 @@ function Field<Fields extends FieldValues>({
         {...props}
         {...(fieldState.invalid ? { "data-invalid": "" } : {})}
         data-slot="field"
-        data-disabled
         className={cn("group", fieldVariants[variant], className)}
       />
     </FieldContext.Provider>
