@@ -81,7 +81,7 @@ function Home() {
       <Form hform={form}>
         <Fieldset>
           <FieldGroup>
-            <Field name="email" aria-disabled>
+            <Field name="email">
               <Label>Nome</Label>
               <Input />
               <Description>This is your public display name.</Description>
@@ -95,12 +95,12 @@ function Home() {
               <Label>Type</Label>
               <RadioGroup>
                 <RadioSlot>
-                  <Radio color="green" value="a" />
+                  <Radio variant="blue" value="a" />
                   <Label>A</Label>
                   <Description>Some description</Description>
                 </RadioSlot>
                 <RadioSlot>
-                  <Radio color="black" value="b" />
+                  <Radio variant="black" value="b" />
                   <Label>B</Label>
                   <Description>Some description</Description>
                 </RadioSlot>
