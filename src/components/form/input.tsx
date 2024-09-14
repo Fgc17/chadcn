@@ -40,7 +40,7 @@ export function PrimitiveInput({ className, type, ...props }: InputProps) {
           "flex w-full px-3 py-2",
 
           // Size
-          "h-10 text-sm",
+          "h-10",
 
           // Border & Radius
           "rounded-md border border-gray-200 outline-none",
@@ -56,9 +56,6 @@ export function PrimitiveInput({ className, type, ...props }: InputProps) {
 
           // Invalid State
           "group-data-[invalid]:border-red-500",
-
-          // Disabled State
-          "disabled:cursor-not-allowed disabled:opacity-50",
 
           // Dark Mode
           "dark:bg-gray-950 dark:ring-offset-gray-950 dark:placeholder:text-gray-400",
@@ -80,12 +77,10 @@ export function Input({
 }: InputProps & {
   mask?: MaskType;
 }) {
-  const form = useParentForm();
-  const { name } = useField();
   const { maskit } = useMask();
 
   return (
-    <Control name={name} control={form.control}>
+    <Control>
       {({ field: { onChange: fieldOnChange, value, ref, ...field } }) => (
         <PrimitiveInput
           className={cn([type && dateTypes.includes(type) && webkitCss])}
