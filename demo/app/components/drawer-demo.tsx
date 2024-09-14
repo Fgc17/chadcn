@@ -9,7 +9,7 @@ import {
   DrawerFooter,
   DrawerClose,
   Drawer,
-} from "@/components/drawer";
+} from "@/components/floating/drawer";
 import { ChartConfig, ChartContainer } from "@/components/chart";
 import { Bar, BarChart, ResponsiveContainer } from "recharts";
 import { Minus, Plus } from "lucide-react";
@@ -101,7 +101,7 @@ export function DrawerDemo() {
                 <div className="text-7xl font-bold tracking-tighter">
                   {goal}
                 </div>
-                <div className="text-muted-foreground text-[0.70rem] uppercase">
+                <div className="text-[0.70rem] uppercase text-muted-foreground">
                   Calories/day
                 </div>
               </div>
