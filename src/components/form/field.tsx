@@ -10,42 +10,66 @@ import {
 import { cn } from "@/lib/utils";
 import * as Headless from "@headlessui/react";
 import { useParentForm } from "./form";
+import { cva, VariantProps } from "class-variance-authority";
 
-const fieldVariants = {
-  default: cn(
-    "[&>[data-slot=label]+[data-slot=control]]:mt-1.5",
-    "[&>[data-slot=label]+[data-slot=description]]:mt-1",
-    "[&>[data-slot=description]+[data-slot=control]]:mt-1.5",
-    "[&>[data-slot=control]+[data-slot=description]]:mt-1.5",
-    "[&>[data-slot=control]+[data-slot=error]]:mt-1.5",
-    "[&>[data-slot=label]]:font-medium"
+const fieldVariants = cva(
+  cn(
+    // Group
+    "group",
+
+    // Disabled state
+    cn(
+      // Opacity
+      "group-data-[disabled]:opacity-50 disabled:opacity-50 has-[[data-disabled]]:opacity-50",
+
+      // Cursor
+      "group-data-[disabled]:cursor-not-allowed disabled:cursor-not-allowed has-[[data-disabled]]:cursor-not-allowed",
+
+      // Selection
+      "group-data-[disabled]:select-none disabled:select-none has-[[data-disabled]]:select-none"
+    )
   ),
-  switch: cn(
-    "grid grid-cols-[1fr_auto]",
-    "items-center gap-x-8 gap-y-1 sm:grid-cols-[1fr_auto]",
+  {
+    variants: {
+      variant: {
+        default: cn(
+          "[&>[data-slot=label]+[data-slot=control]]:mt-1.5",
+          "[&>[data-slot=label]+[data-slot=description]]:mt-1",
+          "[&>[data-slot=description]+[data-slot=control]]:mt-1.5",
+          "[&>[data-slot=control]+[data-slot=description]]:mt-1.5",
+          "[&>[data-slot=control]+[data-slot=error]]:mt-1.5",
+          "[&>[data-slot=label]]:font-medium"
+        ),
+        switch: cn(
+          "grid grid-cols-[1fr_auto]",
+          "items-center gap-x-8 gap-y-1 sm:grid-cols-[1fr_auto]",
 
-    "[&>[data-slot=control]]:col-start-2 [&>[data-slot=control]]:self-center",
+          "[&>[data-slot=control]]:col-start-2 [&>[data-slot=control]]:self-center",
 
-    "[&>[data-slot=label]]:col-start-1 [&>[data-slot=label]]:row-start-1 [&>[data-slot=label]]:justify-self-start",
+          "[&>[data-slot=label]]:col-start-1 [&>[data-slot=label]]:row-start-1 [&>[data-slot=label]]:justify-self-start",
 
-    "[&>[data-slot=description]]:col-start-1 [&>[data-slot=description]]:row-start-2",
+          "[&>[data-slot=description]]:col-start-1 [&>[data-slot=description]]:row-start-2",
 
-    "[&_[data-slot=label]]:has-[[data-slot=description]]:font-medium"
-  ),
-};
+          "[&_[data-slot=label]]:has-[[data-slot=description]]:font-medium"
+        ),
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
-export type FieldProps<Fields extends FieldValues> = Headless.FieldProps & {
-  name: Path<Fields>;
-  variant?: keyof typeof fieldVariants;
-};
+export type FieldProps<Fields extends FieldValues> = Headless.FieldProps &
+  VariantProps<typeof fieldVariants> & {
+    name: Path<Fields>;
+  };
 
 type FieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = ReturnType<UseFormGetFieldState<TFieldValues>> & {
   id: string;
-  errorMessageId: string;
-  descriptionId: string;
   name: TName;
 };
 
@@ -56,9 +80,10 @@ export function Fieldset({
   return (
     <Headless.Fieldset
       {...props}
+      data-fieldset
       className={cn(
-        className,
-        "[&>*+[data-slot=control]]:mt-6 [&>[data-slot=text]]:mt-1"
+        "group [&>*+[data-slot=control]]:mt-6 [&>[data-slot=text]]:mt-1",
+        className
       )}
     />
   );
@@ -83,7 +108,7 @@ export function Legend({
 export function FieldGroup({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="control"
@@ -114,8 +139,6 @@ function Field<Fields extends FieldValues>({
 
   let contextValue: FieldContextValue<Fields> = {
     id,
-    descriptionId: `${id}-description`,
-    errorMessageId: `${id}-error-message`,
     name,
     ...fieldState,
   };
@@ -124,9 +147,9 @@ function Field<Fields extends FieldValues>({
     <FieldContext.Provider value={contextValue}>
       <Headless.Field
         {...props}
-        {...(fieldState.invalid ? { "data-invalid": "" } : {})}
+        data-invalid={fieldState.invalid ? "" : undefined}
         data-slot="field"
-        className={cn("group", fieldVariants[variant], className)}
+        className={cn(fieldVariants({ variant }), className)}
       />
     </FieldContext.Provider>
   );

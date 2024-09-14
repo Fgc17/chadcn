@@ -6,6 +6,7 @@ import { Control, useParentForm } from "./form";
 import { useField } from "./field";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
+import { Overlay } from "./overlay";
 
 const radioVariants = cva(
   cn(
@@ -106,32 +107,30 @@ export function RadioGroup({
   className,
   ...props
 }: Headless.RadioGroupProps) {
-  const { control } = useParentForm();
-  const { name } = useField();
-
   return (
-    <Control name={name} control={control}>
-      {({ field: { onChange: fieldOnChange, value, ..._field } }) => (
-        <Headless.RadioGroup
-          data-slot="control"
-          value={value || ""}
-          onChange={(v) => {
-            onChange && onChange(v);
-            fieldOnChange(v);
-          }}
-          as="div"
-          className={cn(
-            className,
-            // Basic groups
-            "mt-3 space-y-3 [&_[data-slot=label]]:font-normal",
-            // With descriptions
-            "has-[[data-slot=description]]:space-y-6 [&_[data-slot=label]]:has-[[data-slot=description]]:font-medium"
-          )}
-          {...props}
-          {..._field}
-        />
-      )}
-    </Control>
+    <Overlay variant={"radioGroup"}>
+      <Control>
+        {({ field: { onChange: fieldOnChange, value, ..._field } }) => (
+          <Headless.RadioGroup
+            value={value || ""}
+            onChange={(v) => {
+              onChange && onChange(v);
+              fieldOnChange(v);
+            }}
+            as="div"
+            className={cn(
+              className,
+              // Basic groups
+              "mt-3 space-y-3 [&_[data-slot=label]]:font-normal",
+              // With descriptions
+              "has-[[data-slot=description]]:space-y-6 [&_[data-slot=label]]:has-[[data-slot=description]]:font-medium"
+            )}
+            {...props}
+            {..._field}
+          />
+        )}
+      </Control>
+    </Overlay>
   );
 }
 

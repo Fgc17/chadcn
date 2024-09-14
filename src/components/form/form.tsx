@@ -6,11 +6,10 @@ import {
   ControllerProps,
   Controller,
 } from "react-hook-form";
-import { createField as primitiveCreateField } from "./field";
+import { createField as primitiveCreateField, useField } from "./field";
 import { z, ZodEffects, ZodObject, ZodRawShape, ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParentFormGroup } from "./form-group";
-import * as PrimitiveForm from "@radix-ui/react-form";
 
 export type OnSubmitFn<Fields extends FieldValues> = (data: Fields) => void;
 
@@ -84,7 +83,7 @@ export function Form<Fields extends FieldValues>({
 }: FormProps<Fields>) {
   return (
     <FormContext.Provider value={hform as any as UseFormReturn}>
-      <PrimitiveForm.Root
+      <form
         onSubmit={
           onSubmit &&
           hform?.handleSubmit((data) => {
@@ -103,12 +102,18 @@ export function Form<Fields extends FieldValues>({
 export function Control({
   children,
   ...props
-}: Omit<ControllerProps, "render"> & {
+}: Omit<ControllerProps, "render" | "name" | "control"> & {
   children: (
     props: Parameters<ControllerProps["render"]>[0]
   ) => React.ReactElement;
 }) {
-  return <Controller {...props} render={children} />;
+  const { control } = useParentForm();
+
+  const { name } = useField();
+
+  return (
+    <Controller control={control} name={name} {...props} render={children} />
+  );
 }
 
 export function bootstrapForm<T extends ZodRawShape>(
