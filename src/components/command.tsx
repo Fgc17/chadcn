@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Separator, SeparatorProps } from "./typography/separator";
 import { ScrollArea } from "./wireframe/scroll-area";
 
-function Combobox<Value, Multiple extends boolean>({
+function Command<Value, Multiple extends boolean>({
   as = "div",
   className,
   ...props
@@ -24,7 +24,7 @@ function Combobox<Value, Multiple extends boolean>({
   );
 }
 
-function ComboboxInput({ className, ...props }: Headless.ComboboxInputProps) {
+function CommandInput({ className, ...props }: Headless.ComboboxInputProps) {
   return (
     <div className="flex items-center px-3 group-data-[state=open]:border-b">
       <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
@@ -39,7 +39,7 @@ function ComboboxInput({ className, ...props }: Headless.ComboboxInputProps) {
   );
 }
 
-function ComboboxOptions({
+function CommandOptions({
   className,
   children,
   empty = "No results found",
@@ -55,13 +55,13 @@ function ComboboxOptions({
         {...props}
       >
         {children}
-        <ComboboxEmpty>{empty}</ComboboxEmpty>
+        <CommandEmpty>{empty}</CommandEmpty>
       </Headless.ComboboxOptions>
     </ScrollArea>
   );
 }
 
-function ComboboxEmpty({ ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function CommandEmpty({ ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className="py-6 text-center text-sm peer-has-[[data-option]]:hidden"
@@ -70,7 +70,7 @@ function ComboboxEmpty({ ...props }: React.HTMLAttributes<HTMLDivElement>) {
   );
 }
 
-function ComboboxOptionGroup({
+function CommandOptionGroup({
   className,
   children,
   heading,
@@ -100,7 +100,7 @@ function ComboboxOptionGroup({
   );
 }
 
-function ComboboxSeparator({ className, ...props }: SeparatorProps) {
+function CommandSeparator({ className, ...props }: SeparatorProps) {
   return (
     <Separator
       className={cn(
@@ -112,7 +112,7 @@ function ComboboxSeparator({ className, ...props }: SeparatorProps) {
   );
 }
 
-function ComboboxOption({ className, ...props }: Headless.ComboboxOptionProps) {
+function CommandOption({ className, ...props }: Headless.ComboboxOptionProps) {
   return (
     <Headless.ComboboxOption
       data-option=""
@@ -125,7 +125,7 @@ function ComboboxOption({ className, ...props }: Headless.ComboboxOptionProps) {
   );
 }
 
-function ComboboxShortcut({
+function CommandShortcut({
   className,
   ...props
 }: React.HTMLAttributes<HTMLSpanElement>) {
@@ -141,12 +141,12 @@ function ComboboxShortcut({
 }
 
 export {
-  Combobox,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptionGroup,
-  ComboboxOptions,
-  ComboboxSeparator,
-  ComboboxShortcut,
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandOption,
+  CommandOptionGroup,
+  CommandOptions,
+  CommandSeparator,
+  CommandShortcut,
 };
