@@ -4,7 +4,10 @@
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "features": {},
-  "forwardPorts": [5000],
+  "forwardPorts": [
+    5000,
+    5173
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,7 +25,9 @@
         "extensions.autoCheckUpdates": false,
         "extensions.autoUpdate": false,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
         "[typescriptreact]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
@@ -38,13 +43,21 @@
         "prettier.configPath": "./.prettierrc.mjs",
         "prettier.prettierPath": "./node_modules/prettier",
         "typescript.tsdk": "node_modules/typescript/lib",
-        "eslint.workingDirectories": ["./"],
+        "eslint.workingDirectories": [
+          "./"
+        ],
         "explorer.compactFolders": false,
         "typescript.preferences.importModuleSpecifier": "shortest",
         "workbench.tree.indent": 20,
         "tailwindCSS.experimental.classRegex": [
-          ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-          ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+          [
+            "cva\\(([^)]*)\\)",
+            "[\"'`]([^\"'`]*).*?[\"'`]"
+          ],
+          [
+            "cx\\(([^)]*)\\)",
+            "(?:'|\"|`)([^']*)(?:'|\"|`)"
+          ]
         ]
       }
     }
