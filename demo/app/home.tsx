@@ -25,9 +25,9 @@ import {
   Button,
   Calendar,
   Description,
-  Disclosure,
-  DisclosureContent,
-  DisclosureTrigger,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   FieldGroup,
   Fieldset,
   Form,
@@ -54,12 +54,12 @@ import {
   Textarea,
   bootstrapForm,
   useForm,
-  Combobox,
-  ComboboxInput,
-  ComboboxOptions,
-  ComboboxOption,
-  ComboboxSeparator,
-  ComboboxOptionGroup,
+  Command,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandSeparator,
+  CommandGroup,
   Select,
   Dialog,
   DialogTitle,
@@ -138,27 +138,27 @@ function Home() {
             </TabList>
             <TabPanels>
               <TabPanel className="space-y-4">
-                <Combobox className="rounded-lg border shadow-md">
-                  <ComboboxInput placeholder="Type a Combobox or search..." />
-                  <ComboboxOptions>
-                    <ComboboxOptionGroup heading="Group"></ComboboxOptionGroup>
-                    <ComboboxSeparator />
-                    <ComboboxOptionGroup heading="People">
-                      <ComboboxOption value="4">
+                <Command className="border shadow-md">
+                  <CommandInput placeholder="Type a Command or search..." />
+                  <CommandList>
+                    <CommandGroup heading="Group"></CommandGroup>
+                    <CommandSeparator />
+                    <CommandGroup heading="People">
+                      <CommandItem value="4">
                         <User className="mr-2 h-4 w-4" />
                         <span>Profile</span>
-                      </ComboboxOption>
-                      <ComboboxOption value="5">
+                      </CommandItem>
+                      <CommandItem value="5">
                         <CreditCard className="mr-2 h-4 w-4" />
                         <span>Billing</span>
-                      </ComboboxOption>
-                      <ComboboxOption value="6">
+                      </CommandItem>
+                      <CommandItem value="6">
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Settings</span>
-                      </ComboboxOption>
-                    </ComboboxOptionGroup>
-                  </ComboboxOptions>
-                </Combobox>
+                      </CommandItem>
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
                 <Sheet>
                   <SheetTrigger>Open sheet</SheetTrigger>
                   <SheetContent>
@@ -222,14 +222,14 @@ function Home() {
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-                <Disclosure>
-                  <DisclosureTrigger as="div">
-                    <Button variant={"outline"}>Disclosure trigger</Button>
-                  </DisclosureTrigger>
-                  <DisclosureContent>
-                    <div>Disclosure content</div>
-                  </DisclosureContent>
-                </Disclosure>
+                <Collapsible>
+                  <CollapsibleTrigger as="div">
+                    <Button variant={"outline"}>Collapsible trigger</Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div>Collapsible content</div>
+                  </CollapsibleContent>
+                </Collapsible>
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="item-1">
                     <AccordionTrigger>Is it accessible?</AccordionTrigger>
