@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import * as Headless from "@headlessui/react";
-import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator, SeparatorProps } from "./typography/separator";
 import { ScrollArea } from "./wireframe/scroll-area";
+import { Search } from "lucide-react";
 
 function Command<Value, Multiple extends boolean>({
   as = "div",
@@ -26,11 +26,15 @@ function Command<Value, Multiple extends boolean>({
 
 function CommandInput({ className, ...props }: Headless.ComboboxInputProps) {
   return (
-    <div className="flex items-center px-3 group-data-[state=open]:border-b">
-      <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+    <div className="relative">
+      <Headless.ComboboxButton
+        className={"group absolute inset-y-0 left-0 px-2.5"}
+      >
+        <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+      </Headless.ComboboxButton>
       <Headless.ComboboxInput
         className={cn(
-          "flex h-11 w-full rounded-md bg-transparent py-3 outline-none placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-gray-400",
+          "flex h-11 w-full rounded-md bg-transparent py-3 pl-8 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         {...props}
@@ -39,7 +43,7 @@ function CommandInput({ className, ...props }: Headless.ComboboxInputProps) {
   );
 }
 
-function CommandOptions({
+function CommandList({
   className,
   children,
   empty = "No results found",
@@ -51,7 +55,15 @@ function CommandOptions({
   return (
     <ScrollArea>
       <Headless.ComboboxOptions
-        className={cn("max-h-[300px]", className)}
+        transition
+        anchor={{
+          to: "bottom",
+          gap: 5,
+        }}
+        className={cn(
+          "max-h-[300px] w-[var(--input-width)] rounded-md border bg-white text-sm/6 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0",
+          className
+        )}
         {...props}
       >
         {children}
@@ -70,7 +82,7 @@ function CommandEmpty({ ...props }: React.HTMLAttributes<HTMLDivElement>) {
   );
 }
 
-function CommandOptionGroup({
+function CommandGroup({
   className,
   children,
   heading,
@@ -100,24 +112,23 @@ function CommandOptionGroup({
   );
 }
 
-function CommandSeparator({ className, ...props }: SeparatorProps) {
+function CommandItem({ className, ...props }: Headless.ComboboxOptionProps) {
   return (
-    <Separator
+    <Headless.ComboboxOption
+      data-option=""
       className={cn(
-        "-mx-1 my-2 hidden h-px bg-gray-200 peer-data-[filled]:block dark:bg-gray-800",
+        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[disabled]:opacity-50 dark:data-[focus]:bg-gray-800 dark:data-[focus]:text-gray-50",
         className
       )}
       {...props}
     />
   );
 }
-
-function CommandOption({ className, ...props }: Headless.ComboboxOptionProps) {
+function CommandSeparator({ className, ...props }: SeparatorProps) {
   return (
-    <Headless.ComboboxOption
-      data-option=""
+    <Separator
       className={cn(
-        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[disabled]:opacity-50 dark:data-[focus]:bg-gray-800 dark:data-[focus]:text-gray-50",
+        "-mx-1 my-2 hidden h-px bg-gray-200 peer-data-[filled]:block dark:bg-gray-800",
         className
       )}
       {...props}
@@ -144,9 +155,9 @@ export {
   Command,
   CommandEmpty,
   CommandInput,
-  CommandOption,
-  CommandOptionGroup,
-  CommandOptions,
+  CommandItem,
+  CommandGroup,
+  CommandList,
   CommandSeparator,
   CommandShortcut,
 };

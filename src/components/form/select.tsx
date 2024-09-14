@@ -6,10 +6,10 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { Drawer, DrawerContent, DrawerTrigger } from "../floating/drawer";
 import {
   Command,
-  CommandOptionGroup,
+  CommandGroup,
   CommandInput,
-  CommandOption,
-  CommandOptions,
+  CommandItem,
+  CommandList,
 } from "../command";
 import { Button, ButtonProps } from "../button";
 import { ReactNode } from "react";
@@ -42,7 +42,7 @@ type SelectProps<
   multiple?: Multiple;
 };
 
-export const SelectOption = CommandOption;
+export const SelectOption = CommandItem;
 
 export function SelectTrigger({
   children,
@@ -133,11 +133,17 @@ export function SelectContent<T, Multiple extends boolean | undefined>({
             onSearch?.(e.target.value as any);
           }}
           displayValue={() => query}
+          className={"rounded-none group-data-[state=open]:border-b"}
         />
       )}
       <div className="min-h-max">
-        <CommandOptions static>
-          <CommandOptionGroup>
+        <CommandList
+          className="border-none"
+          transition={undefined}
+          anchor={undefined}
+          static
+        >
+          <CommandGroup>
             {items.map((option) => (
               <SelectOption
                 key={option}
@@ -150,8 +156,8 @@ export function SelectContent<T, Multiple extends boolean | undefined>({
                 {children(option)}
               </SelectOption>
             ))}
-          </CommandOptionGroup>
-        </CommandOptions>
+          </CommandGroup>
+        </CommandList>
       </div>
     </Command>
   );
