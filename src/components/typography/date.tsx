@@ -4,7 +4,7 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { useEffect, useState } from "react";
+import { useMounted } from "@/hooks/use-mounted";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -17,11 +17,7 @@ export function Date({
   format?: string;
   localTime?: boolean;
 }) {
-  const [isClient, setIsClient] = useState(false);
+  const mounted = useMounted();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  return isClient ? dayjs(date).local().format(format) : "";
+  return mounted ? dayjs(date).local().format(format) : "";
 }
