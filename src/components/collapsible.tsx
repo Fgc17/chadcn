@@ -1,11 +1,9 @@
-"use client"
+import * as Headless from "@headlessui/react";
 
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible"
+const Collapsible = Headless.Disclosure;
 
-const Collapsible = CollapsiblePrimitive.Root
+const CollapsibleTrigger = Headless.DisclosureButton;
 
-const CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger
+const CollapsibleContent = Headless.DisclosurePanel;
 
-const CollapsibleContent = CollapsiblePrimitive.CollapsibleContent
-
-export { Collapsible, CollapsibleTrigger, CollapsibleContent }
+export { Collapsible, CollapsibleTrigger, CollapsibleContent };
