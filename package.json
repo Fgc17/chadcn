@@ -5,7 +5,7 @@
   "scripts": {
     "barrel": "barrelsby --directory ./src --ext ts,tsx --delete",
     "dev": "chokidar './src/**/*.{ts,tsx}' -i './src/index.ts' -c 'npm run barrel' --initial",
-    "demo": "npm run dev & vite serve demo"
+    "demo": "vite serve demo & npm run dev"
   },
   "type": "module",
   "dependencies": {

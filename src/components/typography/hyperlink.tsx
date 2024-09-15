@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Link } from "../link";
+import { Link } from "../navigation/link";
 
 export function Hyperlink({
   className,
