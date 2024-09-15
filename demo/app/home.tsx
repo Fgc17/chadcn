@@ -69,16 +69,25 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTrigger,
+  MobileSidebar,
+  SidebarBody,
+  SidebarDivider,
+  SidebarHeader,
+  SidebarHeading,
+  SidebarItem,
+  SidebarLabel,
+  SidebarSection,
+  Icon,
+  SidebarSpacer,
+  SidebarFooter,
+  MobileSidebarContent,
+  MobileSidebarTrigger,
+  MobileSidebarClose,
+  Alert,
+  AlertTitle,
+  AlertDescription,
 } from "chadcn";
-import {
-  Cake,
-  Calculator,
-  CheckIcon,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from "lucide-react";
+import { BookIcon, XIcon } from "lucide-react";
 
 const items = Array.from({ length: 50 }).map((_, i) => String(i));
 
@@ -130,6 +139,61 @@ function Home() {
     <div className="z-20 mx-auto h-svh bg-white md:flex md:max-w-md md:shadow-xl">
       <div className="flex h-full w-full flex-col overflow-y-auto bg-white">
         <div className="flex-grow space-y-4 px-4 py-3 pb-12">
+          <MobileSidebar>
+            <MobileSidebarTrigger>
+              <Button variant="outline">Open sidebar</Button>
+            </MobileSidebarTrigger>
+            <MobileSidebarContent>
+              <SidebarHeader className="p-4">
+                <div className="flex items-center justify-between">
+                  <p className="inline-flex items-center gap-2 font-medium text-gray-700">
+                    <BookIcon className="size-6" />
+                    <SidebarLabel>Sidebar</SidebarLabel>
+                  </p>
+                  <MobileSidebarClose>
+                    <XIcon className="size-6 text-black" />
+                  </MobileSidebarClose>
+                </div>
+              </SidebarHeader>
+              <SidebarBody>
+                <SidebarSection>
+                  <SidebarItem href="/home">
+                    <Icon name="House" />
+                    <SidebarLabel>Home</SidebarLabel>
+                  </SidebarItem>
+                  <SidebarItem href="/events" current>
+                    <Icon name="Calendar" />
+                    <SidebarLabel>Events</SidebarLabel>
+                  </SidebarItem>
+                  <SidebarItem href="/orders">
+                    <Icon name="Ticket" />
+                    <SidebarLabel>Orders</SidebarLabel>
+                  </SidebarItem>
+                </SidebarSection>
+
+                <SidebarSpacer />
+
+                <SidebarSection>
+                  <SidebarItem href="/broadcasts">
+                    <Icon name="Megaphone" />
+                    <SidebarLabel>Broadcasts</SidebarLabel>
+                  </SidebarItem>
+                  <SidebarItem href="/settings">
+                    <Icon name="Settings" />
+                    <SidebarLabel>Settings</SidebarLabel>
+                  </SidebarItem>
+                </SidebarSection>
+              </SidebarBody>
+              <SidebarFooter>
+                <Alert>
+                  <AlertTitle>Footer</AlertTitle>
+                  <AlertDescription>
+                    This is a description for the alert.
+                  </AlertDescription>
+                </Alert>
+              </SidebarFooter>
+            </MobileSidebarContent>
+          </MobileSidebar>
           <Tabs className={"w-full"}>
             <TabList className="grid w-full grid-cols-3">
               <Tab>Components</Tab>
@@ -145,15 +209,15 @@ function Home() {
                     <CommandSeparator />
                     <CommandGroup heading="People">
                       <CommandItem value="4">
-                        <User className="mr-2 h-4 w-4" />
+                        <Icon name="User" />
                         <span>Profile</span>
                       </CommandItem>
                       <CommandItem value="5">
-                        <CreditCard className="mr-2 h-4 w-4" />
+                        <Icon name="CreditCard" />
                         <span>Billing</span>
                       </CommandItem>
                       <CommandItem value="6">
-                        <Settings className="mr-2 h-4 w-4" />
+                        <Icon name="Settings" />
                         <span>Settings</span>
                       </CommandItem>
                     </CommandGroup>
