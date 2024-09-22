@@ -1,13 +1,6 @@
-// client
 "use client";
 
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useEffect, useState } from "react";
 
 export type StepContext = {
   stepCount: number;
@@ -89,21 +82,3 @@ export function useSteps({
     getNextStep,
   };
 }
-
-export function StepProvider(context: StepContext & { children: ReactNode }) {
-  return (
-    <StepContext.Provider value={context}>
-      {context.children}
-    </StepContext.Provider>
-  );
-}
-
-export const useStepsContext = () => {
-  const context = useContext(StepContext);
-
-  if (!context) {
-    throw new Error("useStepsContext must be used within a StepProvider");
-  }
-
-  return context;
-};
