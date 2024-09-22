@@ -2,26 +2,28 @@
 
 import * as React from "react";
 import * as Headless from "@headlessui/react";
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 import { Separator, SeparatorProps } from "./typography/separator";
 import { ScrollArea } from "./wireframe/scroll-area";
 import { Search } from "lucide-react";
 
-function Command<Value, Multiple extends boolean>({
-  as = "div",
-  className,
-  ...props
-}: Headless.ComboboxProps<Value, Multiple, keyof React.JSX.IntrinsicElements>) {
-  return (
-    <Headless.Combobox
-      as={as}
-      className={cn(
-        "group overflow-hidden rounded-md bg-white text-gray-950 dark:bg-gray-950 dark:text-gray-50",
-        className
-      )}
-      {...props}
-    />
-  );
+type DEFAULT_COMBOBOX_TAG = React.ExoticComponent<{
+  children?: React.ReactNode;
+}>;
+
+function Command<
+  T,
+  M extends boolean,
+  E extends React.ElementType = DEFAULT_COMBOBOX_TAG,
+>({ ...props }: React.ComponentProps<typeof Headless.Combobox<T, M, E>>) {
+  if ("className" in props) {
+    props.className = cn(
+      "group overflow-hidden rounded-md bg-white text-gray-950 dark:bg-gray-950 dark:text-gray-50",
+      props.className
+    );
+  }
+
+  return <Headless.Combobox {...props} />;
 }
 
 function CommandInput({ className, ...props }: Headless.ComboboxInputProps) {
@@ -112,7 +114,10 @@ function CommandGroup({
   );
 }
 
-function CommandItem({ className, ...props }: Headless.ComboboxOptionProps) {
+function CommandItem({
+  className,
+  ...props
+}: React.ComponentProps<typeof Headless.ComboboxOption>) {
   return (
     <Headless.ComboboxOption
       data-option=""

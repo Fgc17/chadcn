@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../floating/popover";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "chadcn/hooks/use-media-query";
 import { Drawer, DrawerContent, DrawerTrigger } from "../floating/drawer";
 import {
   Command,
@@ -11,238 +11,209 @@ import {
   CommandItem,
   CommandList,
 } from "../command";
-import { Button, ButtonProps } from "../button";
+import { Button } from "../button";
 import { ReactNode } from "react";
 import { ChevronsUpDown, XIcon } from "lucide-react";
 import { Overlay } from "./overlay";
-import * as Headless from "@headlessui/react";
+import { cn } from "chadcn/lib/utils";
+import { useParentForm } from "./form";
+import _, { isArray } from "lodash";
 import { Badge } from "../badge";
-import { cn } from "@/lib/utils";
-import { Control } from "./form";
-
-const SelectContext = React.createContext<{
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
-  selected: any;
-  setSelected: React.Dispatch<React.SetStateAction<any>>;
-  multiple: boolean;
-} | null>(null);
+import { For } from "../for";
+import { useController } from "react-hook-form";
+import { useField } from "./field";
 
 type SelectProps<
-  T,
-  Multiple extends boolean | undefined,
-> = Headless.CommandProps<T, Multiple, "input"> & {
-  emptyState?: ReactNode;
-  searchable?: boolean;
-  onSearch?: (query: string) => void;
-  items?: string[];
-  children: (item: string) => ReactNode;
-  multiple?: Multiple;
-};
-
-export const SelectOption = CommandItem;
-
-export function SelectTrigger({
-  children,
-  placeholder,
-  ...props
-}: ButtonProps & {
+  Option extends Record<keyof any, ReactNode>,
+  Multiple extends boolean,
+> = Omit<React.ComponentProps<typeof Command<Option, Multiple>>, "children"> & {
   placeholder: ReactNode;
-}) {
-  const context = React.useContext(SelectContext);
-
-  if (!context) return null;
-
-  const { selected } = context;
-
-  const displayValue = Array.isArray(selected) ? (
-    selected.map((s) => (
-      <Badge
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          context.setSelected((prev: any[]) => prev.filter((i) => i !== s));
-        }}
-        className="mb-2"
-      >
-        {s}
-        <XIcon className="size-2" />
-      </Badge>
-    ))
-  ) : (
-    <p className="mb-2">{selected}</p>
+  options: Option[];
+  children: (item: Option) => ReactNode;
+  className?: string;
+  labelBy: keyof Option;
+} & (
+    | {
+        searchable: true;
+        onSearch?: (query: string) => void;
+      }
+    | {
+        searchable?: false;
+        onSearch?: never;
+      }
   );
 
-  return (
-    <Button
-      variant="outline"
-      size="variable"
-      className={cn(
-        "flex w-full justify-between text-wrap",
-
-        "has-[[data-invalid]]:border-red-500 has-[[data-invalid]]:text-red-600 group-data-[invalid]:border-red-500 group-data-[invalid]:text-red-600"
-      )}
-      {...props}
-    >
-      <div className={cn("-mb-2 space-x-2")}>
-        {selected ? displayValue : <p className="mb-2">{placeholder}</p>}
-      </div>
-      <div>
-        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-      </div>
-    </Button>
-  );
-}
-
-export function SelectContent<T, Multiple extends boolean | undefined>({
-  items = [],
+export function PrimitiveSelect<
+  Option extends Record<keyof any, ReactNode>,
+  Multiple extends boolean,
+>({
   children,
-  onSearch,
-  onChange,
   searchable,
+  placeholder,
+  onSearch,
+  options,
+  labelBy = "id" as any,
+  onChange,
+  value,
   ...props
-}: SelectProps<T, Multiple>) {
-  const context = React.useContext(SelectContext);
+}: SelectProps<Option, Multiple>) {
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [selected, setSelected] = React.useState<typeof value>();
 
-  if (!context) return null;
+  const Floating = isDesktop ? Popover : Drawer;
+  const FloatingTrigger = isDesktop ? PopoverTrigger : DrawerTrigger;
+  const FloatingContent = isDesktop ? PopoverContent : DrawerContent;
 
-  const { setOpen, query, setQuery, selected, setSelected, multiple } = context;
-
-  const handleSelect = (item: string) => {
-    if (multiple) {
-      setSelected((prev: any[]) =>
-        prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+  const display = (selected: Option) => {
+    if (isArray(selected)) {
+      return (
+        <For each={selected}>
+          {(s) => (
+            <Badge
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setSelected(selected.filter((o) => o !== s) as typeof value);
+              }}
+              className="mb-2"
+            >
+              {s[labelBy] ?? placeholder}
+              <XIcon className="size-2" />
+            </Badge>
+          )}
+        </For>
       );
-    } else {
-      setSelected(item);
-      setOpen(false);
     }
+
+    return (
+      <p className="mb-2">
+        {_.isEmpty(selected) ? placeholder : (selected as Option)[labelBy]}
+      </p>
+    );
   };
 
+  React.useEffect(() => {
+    selected && onChange?.(selected);
+    !props.multiple && setOpen(false);
+  }, [selected]);
+
   return (
-    <Command {...props} as="div" onChange={(e) => onChange?.(selected || e)}>
-      {searchable && (
-        <CommandInput
-          value={query}
-          onChange={(e) => {
-            setQuery(() => {
-              return e.target.value;
-            });
-            onSearch?.(e.target.value as any);
-          }}
-          displayValue={() => query}
-          className={"rounded-none group-data-[state=open]:border-b"}
-        />
-      )}
-      <div className="min-h-max">
-        <CommandList
-          className="border-none"
-          transition={undefined}
-          anchor={undefined}
-          static
-        >
-          <CommandGroup>
-            {items.map((option) => (
-              <SelectOption
-                key={option}
-                value={option}
-                onClick={() => handleSelect(option)}
-              >
-                {multiple && selected?.includes(option) && (
-                  <XIcon className="h-4 w-4" />
+    <Command
+      {...props}
+      as={React.Fragment}
+      value={selected}
+      onChange={(v) => setSelected(v as typeof value)}
+    >
+      {({ value }) => (
+        <Floating open={open} onOpenChange={setOpen}>
+          <Overlay variant={"select"}>
+            <FloatingTrigger ref={triggerRef} asChild>
+              <Button
+                variant="outline"
+                size="variable"
+                className={cn(
+                  "flex min-h-10 w-full justify-between text-wrap px-3 py-2 font-normal",
+                  "has-[[data-invalid]]:border-red-500 has-[[data-invalid]]:text-red-600 group-data-[invalid]:border-red-500 group-data-[invalid]:text-red-600"
                 )}
-                {children(option)}
-              </SelectOption>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </div>
+              >
+                <div className={cn("-mb-2 space-x-2")}>{display(value)}</div>
+
+                <div>
+                  <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                </div>
+              </Button>
+            </FloatingTrigger>
+          </Overlay>
+          <FloatingContent
+            className="p-0"
+            style={{
+              width: isDesktop ? triggerRef.current?.offsetWidth : undefined,
+            }}
+          >
+            <div className={cn(!isDesktop && "mt-4 border-t")}>
+              <div
+                className={cn(
+                  !searchable && "pointer-events-none invisible fixed w-full"
+                )}
+              >
+                <CommandInput
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    onSearch?.(e.target.value);
+                  }}
+                  displayValue={() => query}
+                  className={"rounded-none group-data-[state=open]:border-b"}
+                />
+              </div>
+              <div className="min-h-max">
+                <CommandList
+                  className="border-none"
+                  transition={undefined}
+                  anchor={undefined}
+                  static
+                >
+                  <CommandGroup>
+                    <For each={options}>
+                      {(option, index) => (
+                        <CommandItem key={index} value={option}>
+                          {({ selected }) => (
+                            <>
+                              {props.multiple && selected && (
+                                <XIcon className="h-4 w-4" />
+                              )}
+                              {children(option)}
+                            </>
+                          )}
+                        </CommandItem>
+                      )}
+                    </For>
+                  </CommandGroup>
+                </CommandList>
+              </div>
+            </div>
+          </FloatingContent>
+        </Floating>
+      )}
     </Command>
   );
 }
 
-export function PrimitiveSelect<T, Multiple extends boolean | undefined>({
-  items = [],
-  children,
-  multiple = false,
-  ...props
-}: SelectProps<T, Multiple>) {
-  const triggerRef = React.useRef<HTMLButtonElement>(null);
+export function Select<
+  Option extends Record<keyof any, ReactNode>,
+  Multiple extends boolean,
+>({ onChange, ...props }: SelectProps<Option, Multiple>) {
+  const { control } = useParentForm();
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { name } = useField();
 
-  const [open, setOpen] = React.useState(false);
-  const [query, setQuery] = React.useState("");
-  const [selected, setSelected] = React.useState(multiple ? [] : null);
-
-  const contextValue = {
-    open,
-    setOpen,
-    query,
-    setQuery,
-    selected,
-    setSelected,
-    multiple,
-  };
+  const {
+    field: { value, onChange: setValue, ...field },
+  } = useController({
+    control: control,
+    name,
+  });
 
   return (
-    <SelectContext.Provider value={contextValue}>
-      {isDesktop ? (
-        <Popover open={open} onOpenChange={setOpen}>
-          <Overlay variant={"select"}>
-            <PopoverTrigger ref={triggerRef} asChild>
-              <SelectTrigger placeholder={props.placeholder} />
-            </PopoverTrigger>
-          </Overlay>
-          <PopoverContent
-            className="p-0"
-            style={{
-              width: triggerRef.current?.offsetWidth,
-            }}
-          >
-            <SelectContent {...props} items={items}>
-              {children}
-            </SelectContent>
-          </PopoverContent>
-        </Popover>
-      ) : (
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger asChild ref={triggerRef}>
-            <SelectTrigger placeholder={props.placeholder} />
-          </DrawerTrigger>
-          <DrawerContent className="p-0">
-            <div className="mt-4 border-t">
-              <SelectContent {...props} items={items}>
-                {children}
-              </SelectContent>
-            </div>
-          </DrawerContent>
-        </Drawer>
-      )}
-    </SelectContext.Provider>
-  );
-}
+    <PrimitiveSelect
+      {...props}
+      {...field}
+      value={value}
+      onChange={(v) => {
+        if (props.by) {
+          const by = props.by;
+          return setValue(
+            isArray(v)
+              ? v.map((o) => (o as typeof value)?.[by])
+              : (v as typeof value)?.[by]
+          );
+        }
 
-export function Select<T, Multiple extends boolean | undefined>({
-  onChange,
-  ...props
-}: SelectProps<T, Multiple>) {
-  return (
-    <Control>
-      {({ field: { onChange: fieldOnChange, value, ref, ...field } }) => (
-        <PrimitiveSelect
-          value={value || ""}
-          onChange={(v) => {
-            console.log(v);
-            fieldOnChange(v);
-            onChange?.(v);
-          }}
-          {...props}
-          {...field}
-        />
-      )}
-    </Control>
+        return setValue(v);
+      }}
+    />
   );
 }
