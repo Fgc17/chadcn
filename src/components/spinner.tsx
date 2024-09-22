@@ -1,9 +1,9 @@
 /** Credits:  */
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
 import { Loader2 } from "lucide-react";
 
-const loaderVariants = cva("animate-spin text-primary", {
+const spinnerVariants = cva("animate-spin", {
   variants: {
     size: {
       small: "*:size-6",
@@ -20,14 +20,17 @@ const loaderVariants = cva("animate-spin text-primary", {
   },
 });
 
-interface SpinnerContentProps extends VariantProps<typeof loaderVariants> {
+interface SpinnerContentProps extends VariantProps<typeof spinnerVariants> {
   className?: string;
 }
 
 export function Spinner({ size, show, className }: SpinnerContentProps) {
   return (
-    <div className={cn(loaderVariants({ size, show: Boolean(show) }))}>
+    <span
+      data-slot="spinner"
+      className={cn(spinnerVariants({ size, show: Boolean(show) }))}
+    >
       <Loader2 className={className} />
-    </div>
+    </span>
   );
 }

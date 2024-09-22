@@ -7,7 +7,7 @@ import {
   Path,
   UseFormGetFieldState,
 } from "react-hook-form";
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 import * as Headless from "@headlessui/react";
 import { useParentForm } from "./form";
 import { cva, VariantProps } from "class-variance-authority";

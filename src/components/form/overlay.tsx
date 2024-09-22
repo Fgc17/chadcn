@@ -1,7 +1,7 @@
 // client
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 import { Link } from "../navigation/link";
 
 export function Hyperlink({

@@ -2,7 +2,7 @@
 
 import * as Headless from "@headlessui/react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 
 const Tabs = Headless.TabGroup;
 const TabPanels = Headless.TabPanels;

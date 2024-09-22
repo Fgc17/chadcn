@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 
 function Drawer({
   shouldScaleBackground = true,

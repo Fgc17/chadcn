@@ -1,5 +1,5 @@
 import * as Headless from "@headlessui/react";
-import { cn } from "@/lib/utils";
+import { cn } from "chadcn/lib/utils";
 import { Overlay } from "./overlay";
 import { Control } from "./form";
 

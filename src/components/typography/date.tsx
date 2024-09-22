@@ -4,7 +4,7 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { useMounted } from "@/hooks/use-mounted";
+import { useMounted } from "chadcn/hooks/use-mounted";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 

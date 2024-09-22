@@ -1,9 +1,8 @@
 "use client";
 
 import * as Headless from "@headlessui/react"; // Using Headless UI for the Switch
-import { cn } from "@/lib/utils";
-import { useField } from "./field";
-import { Control, useParentForm } from "./form";
+import { cn } from "chadcn/lib/utils";
+import { Control } from "./form";
 
 export type SwitchProps = Headless.SwitchProps;
 

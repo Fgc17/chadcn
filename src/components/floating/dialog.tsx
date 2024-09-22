@@ -1,7 +1,8 @@
+"use client";
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "chadcn/lib/utils";
+import { useMediaQuery } from "chadcn/hooks/use-media-query";
 import {
   Drawer,
   DrawerTrigger,
@@ -136,15 +137,24 @@ export function DialogDescription({
 type DialogFooterProps = {
   children: React.ReactNode;
   className?: string;
+  reverse?: boolean;
 };
 
-export function DialogFooter({ children, className }: DialogFooterProps) {
+export function DialogFooter({
+  children,
+  className,
+  reverse,
+}: DialogFooterProps) {
   const { isDesktop } = React.useContext(DialogContext);
 
   return isDesktop ? (
     <div className={cn("modal-footer", className)}>{children}</div>
   ) : (
-    <DrawerFooter className={className}>{children}</DrawerFooter>
+    <DrawerFooter
+      className={cn("drawer-footer", reverse && "flex-col-reverse", className)}
+    >
+      {children}
+    </DrawerFooter>
   );
 }
 
