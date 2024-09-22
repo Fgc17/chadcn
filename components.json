@@ -9,11 +9,11 @@
     "prefix": ""
   },
   "aliases": {
-    "ui": "@/components",
-    "components": "@/components",
-    "hooks": "@/hooks",
-    "lib": "@/lib",
-    "utils": "@/lib/utils"
+    "ui": "chadcn/components",
+    "components": "chadcn/components",
+    "hooks": "chadcn/hooks",
+    "lib": "chadcn/lib",
+    "utils": "chadcn/lib/utils"
   },
   "rsc": true,
   "tsx": true
