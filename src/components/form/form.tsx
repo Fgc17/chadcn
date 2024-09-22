@@ -1,4 +1,5 @@
-import { createContext, useContext, useId, useEffect } from "react";
+"use client";
+import { createContext, useContext, useEffect, useId } from "react";
 import {
   useForm as useReactHookForm,
   UseFormProps as useReactHookFormProps,
@@ -7,8 +8,9 @@ import {
   Controller,
 } from "react-hook-form";
 import { createField as primitiveCreateField, useField } from "./field";
-import { z, ZodEffects, ZodObject, ZodRawShape, ZodTypeAny } from "zod";
+import { ZodEffects, ZodObject, ZodRawShape, ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "chadcn/lib/zod";
 import { useParentFormGroup } from "./form-group";
 
 export type OnSubmitFn<Fields extends FieldValues> = (data: Fields) => void;
@@ -26,9 +28,8 @@ export type UseFormProps<Fields extends FieldValues> = Omit<
 
 export type FormProps<Fields extends FieldValues> = Omit<
   React.ComponentProps<"form">,
-  "onSubmit" | "id" | "ref"
+  "onSubmit" | "id"
 > & {
-  innerRef?: React.RefObject<HTMLFormElement>;
   hform: UseFormReturn<Fields>;
   onSubmit?: (data: Fields) => void;
 };
@@ -54,23 +55,23 @@ export function useForm<F extends FieldValues>({
     resolver: zodResolver(schema as any),
   });
 
-  const parentFormGroup = useParentFormGroup();
-
-  const createField = primitiveCreateField<Fields>;
+  const formGroup = useParentFormGroup();
 
   const form = {
     id: useReactHookFormProps.id ?? id,
-    createField,
     schema,
     onSubmit,
     ...hookform,
   };
 
   useEffect(() => {
-    if (!parentFormGroup) return;
-
-    parentFormGroup.updateForm(form as any);
-  }, [form.formState.errors, form.formState.isValid]);
+    if (formGroup) {
+      formGroup.state.updateSlot(form.id, {
+        trigger: hookform.trigger,
+        getValues: hookform.getValues,
+      });
+    }
+  }, []);
 
   return form;
 }
@@ -78,7 +79,6 @@ export function useForm<F extends FieldValues>({
 export function Form<Fields extends FieldValues>({
   onSubmit,
   hform,
-  innerRef,
   ...props
 }: FormProps<Fields>) {
   return (
@@ -86,12 +86,11 @@ export function Form<Fields extends FieldValues>({
       <form
         onSubmit={
           onSubmit &&
-          hform?.handleSubmit((data) => {
+          hform?.handleSubmit(async (data) => {
             hform.trigger();
             return onSubmit ? onSubmit(data) : hform.onSubmit?.(data);
           })
         }
-        ref={innerRef}
         id={hform.id}
         {...props}
       />
@@ -116,17 +115,18 @@ export function Control({
   );
 }
 
-export function bootstrapForm<T extends ZodRawShape>(
-  ...args: Parameters<typeof z.object<T>>
+export function bootstrapForm<T extends ZodTypeAny>(
+  schema: (zod: typeof z) => T
 ) {
-  const schema = z.object(...args);
-
-  type Fields = z.infer<typeof schema>;
+  type Fields = z.infer<ReturnType<typeof schema>>;
 
   const Field = primitiveCreateField<Fields>();
 
+  const _schemaType = {} as z.infer<T>;
+
   return {
-    schema,
+    schema: schema(z),
     Field,
+    _schemaType,
   };
 }
