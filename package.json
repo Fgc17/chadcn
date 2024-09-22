@@ -3,22 +3,36 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "barrel": "barrelsby --directory ./src --ext ts,tsx --delete",
+    "barrel": "barrelsby --directory ./ --delete --include \".*src/.*\\.(ts|tsx)$\"",
     "dev": "chokidar './src/**/*.{ts,tsx}' -i './src/index.ts' -c 'npm run barrel' --initial",
     "demo": "vite serve demo & npm run dev"
+  },
+  "exports": {
+    ".": {
+      "default": "./index.ts"
+    },
+    "./styles": {
+      "default": "./src/styles/globals.css"
+    },
+    "./tailwind": {
+      "default": "./tailwind.config.mjs"
+    }
   },
   "type": "module",
   "dependencies": {
     "@headlessui/react": "0.0.0-insiders.dde00da",
-    "@radix-ui/react-popover": "1.1.1",
+    "@hookform/resolvers": "3.3.4",
     "@radix-ui/react-accordion": "1.2.0",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-avatar": "^1.1.0",
+    "@radix-ui/react-context": "^1.1.0",
     "@radix-ui/react-context-menu": "^2.2.1",
+    "@radix-ui/react-dialog": "1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-hover-card": "^1.1.1",
     "@radix-ui/react-menubar": "^1.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.0",
+    "@radix-ui/react-popover": "1.1.1",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-radio-group": "^1.2.0",
     "@radix-ui/react-scroll-area": "^1.1.0",
@@ -29,12 +43,11 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@radix-ui/react-visually-hidden": "^1.1.0",
-    "@radix-ui/react-context": "^1.1.0",
-    "@radix-ui/react-dialog": "1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "2.1.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.2.1",
+    "i18next": "^23.15.1",
     "input-otp": "^1.2.4",
     "lodash": "^4.17.21",
     "lucide-react": "^0.439.0",
@@ -43,21 +56,21 @@
     "react-day-picker": "8.10.1",
     "react-dom": "19.0.0-rc-a03254bc-20240905",
     "react-hook-form": "^7.53.0",
-    "@hookform/resolvers": "3.3.4",
     "react-resizable-panels": "^2.1.2",
     "recharts": "2.13.0-alpha.5",
     "sonner": "^1.5.0",
     "vaul": "^0.9.2",
-    "zod": "3.21.0"
+    "zod": "3.21.0",
+    "zod-i18n-map": "^2.27.0"
   },
   "devDependencies": {
-    "chokidar-cli": "3.0.0",
-    "barrelsby": "2.8.1",
     "@types/lodash": "4.17.7",
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "barrelsby": "2.8.1",
+    "chokidar-cli": "3.0.0",
     "dayjs": "^1.11.10",
     "postcss": "^8.4.45",
     "prettier": "^3.3.3",
@@ -69,6 +82,9 @@
     "typescript": "5.5.4",
     "vite": "^5.4.3",
     "vite-tsconfig-paths": "^5.0.1"
+  },
+  "peerDependencies": {
+    "next": "15.0.0-canary.156"
   },
   "pnpm": {
     "overrides": {
