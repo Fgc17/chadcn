@@ -2,9 +2,14 @@
 
 import * as Headless from "@headlessui/react";
 import clsx from "clsx";
-import React, { forwardRef, Fragment, useEffect, useId } from "react";
+import React, { useId } from "react";
 import { Link } from "../navigation/link";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetTrigger,
+  SheetContent,
+} from "../floating/sheet";
 
 export function Sidebar({
   className,
@@ -31,7 +36,7 @@ export function MobileSidebarContent({
   return (
     <SheetContent
       {...props}
-      className="flex h-full w-auto max-w-80 flex-col gap-0 rounded-lg bg-white p-0 shadow-sm ring-1 ring-zinc-950/5 data-[slot=close]:*:hidden dark:bg-zinc-900 dark:ring-white/10"
+      className="inset-2 flex h-[98%] w-auto max-w-80 flex-col gap-0 rounded-lg bg-white p-0 shadow-sm ring-1 ring-zinc-950/5 data-[slot=close]:*:hidden dark:bg-zinc-900 dark:ring-white/10"
       side={"left"}
     />
   );
@@ -59,7 +64,10 @@ export function SidebarBody({
   return (
     <div
       {...props}
-      className={clsx(className, "flex flex-1 flex-col overflow-y-auto p-4")}
+      className={clsx(
+        className,
+        "flex flex-1 flex-col gap-2 overflow-y-auto p-4"
+      )}
     />
   );
 }
@@ -131,29 +139,26 @@ export function SidebarHeading({
       {...props}
       className={clsx(
         className,
-        "mb-1 px-2 text-xs/6 font-medium text-zinc-500 dark:text-zinc-400"
+        "px-2 text-xs/6 font-medium text-zinc-500 dark:text-zinc-400"
       )}
     />
   );
 }
 
-export const SidebarItem = forwardRef(function SidebarItem(
-  {
-    current,
-    className,
-    children,
-    ...props
-  }: {
-    current?: boolean;
-    className?: string;
-    children: React.ReactNode;
-    disabled?: boolean;
-  } & (
-    | Omit<Headless.ButtonProps, "className">
-    | Omit<React.ComponentPropsWithoutRef<typeof Link>, "type" | "className">
-  ),
-  ref: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>
-) {
+export function SidebarItem({
+  current,
+  className,
+  children,
+  ...props
+}: {
+  current?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  disabled?: boolean;
+} & (
+  | Omit<Headless.ButtonProps, "className">
+  | Omit<React.ComponentPropsWithoutRef<typeof Link>, "type" | "className">
+)) {
   let classes = clsx(
     // Base
     "flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-zinc-950 sm:py-2 sm:text-sm/5",
@@ -184,7 +189,7 @@ export const SidebarItem = forwardRef(function SidebarItem(
         <span className="absolute inset-y-2 -left-4 w-0.5 rounded-full bg-zinc-950 dark:bg-white" />
       )}
       {"href" in props ? (
-        <Headless.CloseButton as={Fragment} ref={ref}>
+        <MobileSidebarClose asChild>
           <Link
             className={classes}
             {...props}
@@ -192,20 +197,19 @@ export const SidebarItem = forwardRef(function SidebarItem(
           >
             {children}
           </Link>
-        </Headless.CloseButton>
+        </MobileSidebarClose>
       ) : (
         <Headless.Button
           {...props}
           className={clsx("cursor-default", classes)}
           data-current={current ? "true" : undefined}
-          ref={ref}
         >
           {children}
         </Headless.Button>
       )}
     </span>
   );
-});
+}
 
 export function SidebarLabel({
   className,
