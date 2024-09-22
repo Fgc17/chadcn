@@ -12,4 +12,6 @@ const Icon = ({
   return <LucideIcon data-slot="icon" {...props} />;
 };
 
-export { Icon };
+type IconName = keyof typeof icons;
+
+export { type IconName, Icon };
