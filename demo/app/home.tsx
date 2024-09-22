@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Input } from "@/components/form/input";
+import { Input } from "chadcn/components/form/input";
 import { z } from "zod";
 
 import {
@@ -71,9 +71,7 @@ import {
   DialogTrigger,
   MobileSidebar,
   SidebarBody,
-  SidebarDivider,
   SidebarHeader,
-  SidebarHeading,
   SidebarItem,
   SidebarLabel,
   SidebarSection,
@@ -86,18 +84,20 @@ import {
   Alert,
   AlertTitle,
   AlertDescription,
-} from "chadcn";
+} from "index";
 import { BookIcon, XIcon } from "lucide-react";
 
 const items = Array.from({ length: 50 }).map((_, i) => String(i));
 
-const { Field, schema } = bootstrapForm({
-  email: z.string().email(),
-  isUnderage: z.boolean(),
-  type: z.enum(["a", "b"]),
-  password: z.string().regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
-  country: z.string(),
-});
+const { Field, schema } = bootstrapForm(
+  z.object({
+    email: z.string().email(),
+    isUnderage: z.boolean(),
+    type: z.enum(["a", "b"]),
+    password: z.string().regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
+    country: z.string(),
+  })
+);
 
 function Home() {
   const [filteredItems, setFilteredItems] = useState(items);

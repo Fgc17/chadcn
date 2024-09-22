@@ -15,108 +15,108 @@ import {
   Users,
 } from "lucide-react";
 
-import { Button } from "@/components/button";
+import { Button } from "chadcn/components/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/dropdown-menu";
+  Dropdown,
+  DropdownContent,
+  DropdownGroup,
+  DropdownItem,
+  DropdownLabel,
+  DropdownPortal,
+  DropdownSeparator,
+  DropdownShortcut,
+  DropdownSub,
+  DropdownSubContent,
+  DropdownSubTrigger,
+  DropdownTrigger,
+} from "chadcn/components/dropdown-menu";
 
 export function DropdownDemo() {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Dropdown>
+      <DropdownTrigger asChild>
         <Button variant="outline">Open</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
+      </DropdownTrigger>
+      <DropdownContent className="w-56">
+        <DropdownLabel>My Account</DropdownLabel>
+        <DropdownSeparator />
+        <DropdownGroup>
+          <DropdownItem>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+            <DropdownShortcut>⇧⌘P</DropdownShortcut>
+          </DropdownItem>
+          <DropdownItem>
             <CreditCard className="mr-2 h-4 w-4" />
             <span>Billing</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+            <DropdownShortcut>⌘B</DropdownShortcut>
+          </DropdownItem>
+          <DropdownItem>
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+            <DropdownShortcut>⌘S</DropdownShortcut>
+          </DropdownItem>
+          <DropdownItem>
             <Keyboard className="mr-2 h-4 w-4" />
             <span>Keyboard shortcuts</span>
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
+            <DropdownShortcut>⌘K</DropdownShortcut>
+          </DropdownItem>
+        </DropdownGroup>
+        <DropdownSeparator />
+        <DropdownGroup>
+          <DropdownItem>
             <Users className="mr-2 h-4 w-4" />
             <span>Team</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
+          </DropdownItem>
+          <DropdownSub>
+            <DropdownSubTrigger>
               <UserPlus className="mr-2 h-4 w-4" />
               <span>Invite users</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>
+            </DropdownSubTrigger>
+            <DropdownPortal>
+              <DropdownSubContent>
+                <DropdownItem>
                   <Mail className="mr-2 h-4 w-4" />
                   <span>Email</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                </DropdownItem>
+                <DropdownItem>
                   <MessageSquare className="mr-2 h-4 w-4" />
                   <span>Message</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                </DropdownItem>
+                <DropdownSeparator />
+                <DropdownItem>
                   <PlusCircle className="mr-2 h-4 w-4" />
                   <span>More...</span>
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
+                </DropdownItem>
+              </DropdownSubContent>
+            </DropdownPortal>
+          </DropdownSub>
+          <DropdownItem>
             <Plus className="mr-2 h-4 w-4" />
             <span>New Team</span>
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
+            <DropdownShortcut>⌘+T</DropdownShortcut>
+          </DropdownItem>
+        </DropdownGroup>
+        <DropdownSeparator />
+        <DropdownItem>
           <Github className="mr-2 h-4 w-4" />
           <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
+        </DropdownItem>
+        <DropdownItem>
           <LifeBuoy className="mr-2 h-4 w-4" />
           <span>Support</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled>
+        </DropdownItem>
+        <DropdownItem disabled>
           <Cloud className="mr-2 h-4 w-4" />
           <span>API</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        </DropdownItem>
+        <DropdownSeparator />
+        <DropdownItem>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownShortcut>⇧⌘Q</DropdownShortcut>
+        </DropdownItem>
+      </DropdownContent>
+    </Dropdown>
   );
 }

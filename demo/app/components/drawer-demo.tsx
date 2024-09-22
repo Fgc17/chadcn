@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button } from "@/components/button";
+import { Button } from "chadcn/components/button";
 import {
   DrawerTrigger,
   DrawerContent,
@@ -9,8 +9,8 @@ import {
   DrawerFooter,
   DrawerClose,
   Drawer,
-} from "@/components/floating/drawer";
-import { ChartConfig, ChartContainer } from "@/components/chart";
+} from "chadcn/components/floating/drawer";
+import { ChartConfig } from "chadcn/components/chart";
 import { Bar, BarChart, ResponsiveContainer } from "recharts";
 import { Minus, Plus } from "lucide-react";
 
