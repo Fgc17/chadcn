@@ -39,9 +39,10 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "chadcn": ["./src/index.ts"]
+      "chadcn/*": ["./src/*"],
+      "index": ["./index.ts"]
     }
   },
+  "exclude": ["index.ts"],
   "include": ["src/**/*", "demo", "vite.config.js", "demo"]
 }
