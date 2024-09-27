@@ -88,9 +88,13 @@ export function PrimitiveSelect<
       );
     }
 
+    console.log(selected);
+
     return (
       <p className="mb-2">
-        {_.isEmpty(selected) ? placeholder : (selected as Option)[labelBy]}
+        {selected
+          ? options.find((o) => selected === o[props.by])?.[labelBy]
+          : placeholder}
       </p>
     );
   };
@@ -104,8 +108,10 @@ export function PrimitiveSelect<
     <Command
       {...props}
       as={React.Fragment}
-      value={selected}
-      onChange={(v) => setSelected(v as typeof value)}
+      value={value}
+      onChange={(v) =>
+        setSelected(isArray(v) ? v?.map((o) => o[props.by]) : v[props.by])
+      }
     >
       {({ value }) => (
         <Floating open={open} onOpenChange={setOpen}>
@@ -191,7 +197,7 @@ export function Select<
   const { name } = useField();
 
   const {
-    field: { value, onChange: setValue, ...field },
+    field: { value, onChange: fieldOnChange, ...field },
   } = useController({
     control: control,
     name,
@@ -203,16 +209,8 @@ export function Select<
       {...field}
       value={value}
       onChange={(v) => {
-        if (props.by) {
-          const by = props.by;
-          return setValue(
-            isArray(v)
-              ? v.map((o) => (o as typeof value)?.[by])
-              : (v as typeof value)?.[by]
-          );
-        }
-
-        return setValue(v);
+        onChange?.(v);
+        return fieldOnChange(v);
       }}
     />
   );
