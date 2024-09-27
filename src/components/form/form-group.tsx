@@ -1,40 +1,56 @@
 "use client";
 import { useState, createContext, useContext, useEffect } from "react";
-import { FieldValues, UseFormGetValues, UseFormTrigger } from "react-hook-form";
+import { UseFormGetValues, UseFormTrigger } from "react-hook-form";
 import { useSteps } from "chadcn/hooks/use-steps";
 import { cn, MapObject } from "chadcn/lib/utils";
 import { usePaginationUtils } from "chadcn/hooks/use-pagination-utils";
-import { isEmpty } from "lodash";
+import _, { isEmpty } from "lodash";
 import { Button, ButtonProps } from "../button";
+import { FormSchema } from "./form";
+import { ZodTypeAny } from "zod";
 
 export const FormGroupContext = createContext<ReturnType<typeof useFormGroup>>(
   null!
 );
 
-export type FormSlot<Fields extends FieldValues> = {
+export type FormSlot<Fields extends any> = {
   id: keyof any;
-  trigger: UseFormTrigger<Fields>;
-  getValues: UseFormGetValues<Fields>;
+  trigger: UseFormTrigger<{
+    [K in keyof Fields]: Fields[K];
+  }>;
+  getValues: UseFormGetValues<{
+    [K in keyof Fields]: Fields[K];
+  }>;
 };
 
-export type FormGroupType = {
-  [key: string]: FieldValues;
-};
-
-export function useParentFormGroup<FormGroup extends FormGroupType = any>() {
+export function useParentFormGroup<
+  Schemas extends Record<string, FormSchema<string, ZodTypeAny>>,
+>() {
   return useContext(FormGroupContext) as any as ReturnType<
-    typeof useFormGroup<FormGroup>
+    typeof useFormGroup<Schemas>
   >;
 }
 
-export function useFormGroup<FormGroup extends FormGroupType = any>() {
+export function useFormGroup<
+  Schemas extends Record<string, FormSchema<string, ZodTypeAny>>,
+>(schemas: Schemas) {
+  type FormGroup = {
+    [K in keyof Schemas as Schemas[K]["id"]]: Schemas[K]["__inferFields"];
+  };
+
   type FormGroupSlot = {
-    [key in keyof FormGroup]: FormSlot<FormGroup[key]>;
+    [K in keyof FormGroup]: FormSlot<FormGroup[K]>;
+  };
+
+  type ValueStore = {
+    [K in keyof FormGroup]: FormGroup[K];
   };
 
   const [formSlots, setFormSlots] = useState<MapObject<FormGroupSlot>>(
     new Map()
   );
+
+  const [valueStore, setValueStore] = useState<ValueStore>(null!);
 
   function registerSlot(id: keyof FormGroup) {
     setFormSlots((prevForms) => {
@@ -75,6 +91,16 @@ export function useFormGroup<FormGroup extends FormGroupType = any>() {
     );
   }
 
+  function updateValues<FormId extends keyof ValueStore>(
+    id: FormId,
+    values: ValueStore[FormId]
+  ) {
+    setValueStore((prev) => ({
+      ...prev,
+      [id]: values,
+    }));
+  }
+
   const { currentStep, stepCount, walk } = useSteps({
     currentStep: 0,
     stepCount: formSlots.size,
@@ -97,15 +123,18 @@ export function useFormGroup<FormGroup extends FormGroupType = any>() {
     pageCount: stepCount,
   });
 
-  return {
-    state: {
-      getValues,
-      forms: formSlots,
+  const formGroup = {
+    _control: {
+      formSlots,
       registerSlot,
       updateSlot,
+      updateValues,
+    },
+    state: {
+      values: valueStore,
     },
     current: formSlots.get(currentFormId),
-    control: {
+    switch: {
       next,
       previous,
       currentStep,
@@ -113,6 +142,24 @@ export function useFormGroup<FormGroup extends FormGroupType = any>() {
       isLast: isLast(currentStep),
       isFirst: isFirst(currentStep),
     },
+  };
+
+  return formGroup;
+}
+
+export function bootstrapFormGroup<
+  T extends { [K in keyof T]: FormSchema<any, ZodTypeAny> },
+>(schemas: T) {
+  const FormSlotComp = (props: {
+    id: T[keyof T]["id"];
+    children: React.ReactNode;
+  }) => {
+    return <FormSlot {...props} />;
+  };
+
+  return {
+    schemas,
+    FormSlot: FormSlotComp,
   };
 }
 
@@ -130,25 +177,20 @@ export function FormGroup({
   );
 }
 
-export function FormSlot({
-  id,
-  children,
-}: {
-  id: string;
-  children: React.ReactNode;
-}) {
+function FormSlot({ id, children }: { id: string; children: React.ReactNode }) {
   const formGroup = useParentFormGroup();
 
   useEffect(() => {
     if (formGroup) {
-      formGroup.state.registerSlot(id);
+      !formGroup._control.formSlots.has(id) &&
+        formGroup._control.registerSlot(id);
     }
   }, []);
 
-  const shouldShow = formGroup.control.isCurrent(id);
+  const shouldShow = formGroup.switch.isCurrent(id);
 
   const shouldRender =
-    !isEmpty(formGroup.state.forms.get(id)?.getValues()) || shouldShow;
+    !isEmpty(formGroup._control.formSlots.get(id)?.getValues()) || shouldShow;
 
   return shouldRender ? (
     <div className={cn(shouldShow ? "" : "hidden")}>{children}</div>
@@ -161,7 +203,7 @@ export function FormGroupPrevious({
   previousIndicator?: React.ReactNode;
 } & ButtonProps) {
   const formGroup = useParentFormGroup();
-  const { isFirst, previous } = formGroup.control;
+  const { isFirst, previous } = formGroup.switch;
 
   if (isFirst) {
     return null;
@@ -187,7 +229,7 @@ export function FormGroupNext({
   nextIndicator?: React.ReactNode;
 } & ButtonProps) {
   const formGroup = useParentFormGroup();
-  const { isLast, next } = formGroup.control;
+  const { isLast, next } = formGroup.switch;
 
   if (isLast) {
     return null;
@@ -196,6 +238,10 @@ export function FormGroupNext({
   const handleNext = async () => {
     const isValid = await formGroup.current.trigger();
     if (isValid) {
+      formGroup._control.updateValues(
+        formGroup.current.id as string,
+        formGroup.current.getValues()
+      );
       next();
     }
   };
@@ -211,7 +257,7 @@ export function FormGroupExit({
   onExit?: () => void;
 } & ButtonProps) {
   const formGroup = useParentFormGroup();
-  const { isFirst } = formGroup.control;
+  const { isFirst } = formGroup.switch;
 
   const handleExit = () => {
     onExit?.();
@@ -233,7 +279,7 @@ export function FormGroupSubmit({
   onSubmit?: (values: any) => void;
 } & ButtonProps) {
   const formGroup = useParentFormGroup();
-  const { isLast } = formGroup.control;
+  const { isLast } = formGroup.switch;
 
   if (!isLast) {
     return null;
@@ -242,7 +288,7 @@ export function FormGroupSubmit({
   const handleSubmit = async () => {
     const isValid = await formGroup.current.trigger();
     if (isValid) {
-      const values = formGroup.state.getValues();
+      const values = formGroup.state.values;
       onSubmit?.(values);
     }
   };
