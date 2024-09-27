@@ -80,7 +80,7 @@ export function Input({
 
   return (
     <Control>
-      {({ field: { onChange: fieldOnChange, value, ref, ...field } }) => (
+      {({ field: { onChange: fieldOnChange, value, ...field } }) => (
         <PrimitiveInput
           className={cn([type && dateTypes.includes(type) && webkitCss])}
           onChange={(e) => {
