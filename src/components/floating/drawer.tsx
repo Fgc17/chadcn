@@ -4,6 +4,7 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { cn } from "chadcn/lib/utils";
+import { ScrollArea } from "../wireframe/scroll-area";
 
 function Drawer({
   shouldScaleBackground = true,
@@ -11,6 +12,7 @@ function Drawer({
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
   return (
     <DrawerPrimitive.Root
+      repositionInputs={false}
       shouldScaleBackground={shouldScaleBackground}
       {...props}
     />
@@ -40,22 +42,32 @@ function DrawerContent({
   children,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+  const childrenArray = React.Children.toArray(children);
+
+  const hasFooter = childrenArray.length > 1;
+  const footer = hasFooter ? childrenArray[childrenArray.length - 1] : null;
+  const content = hasFooter ? childrenArray.slice(0, -1) : childrenArray;
+
   return (
     <DrawerPortal>
       <DrawerOverlay />
+
       <DrawerPrimitive.Content
+        onOpenAutoFocus={(e) => e.preventDefault()}
         aria-describedby={undefined}
         className={cn(
-          "group fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950",
-          className
+          "group fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950"
         )}
         {...props}
       >
         <VisuallyHidden.Root>
           <DrawerTitle>Hidden</DrawerTitle>
         </VisuallyHidden.Root>
-        <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-gray-100 dark:bg-gray-800" />
-        {children}
+        <div className="mx-auto my-2 mt-4 h-2 w-[100px] rounded-full bg-gray-100 dark:bg-gray-800" />
+        <ScrollArea>
+          <div className={cn("max-h-[500px] p-4", className)}>{content}</div>
+        </ScrollArea>
+        {footer && <div className={cn("p-4 pt-0", className)}>{footer}</div>}
       </DrawerPrimitive.Content>
     </DrawerPortal>
   );
