@@ -59,7 +59,7 @@
     "react-resizable-panels": "^2.1.2",
     "recharts": "2.13.0-alpha.5",
     "sonner": "^1.5.0",
-    "vaul": "^0.9.2",
+    "vaul": "0.9.4",
     "zod": "3.21.0",
     "zod-i18n-map": "^2.27.0"
   },
