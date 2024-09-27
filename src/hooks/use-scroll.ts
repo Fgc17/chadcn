@@ -19,8 +19,6 @@ export function useScroll({
       if (elementRef.current) {
         const currentScroll = window.pageYOffset;
 
-        console.log(currentScroll, initialRefTop);
-
         if (currentScroll > initialRefTop) {
           setIsSticky(true);
         } else if (!keepSticky) {
