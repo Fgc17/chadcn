@@ -133,8 +133,6 @@ function Home() {
     getCountries();
   }, []);
 
-  console.log(form.watch());
-
   return (
     <div className="z-20 mx-auto h-svh bg-white md:flex md:max-w-md md:shadow-xl">
       <div className="flex h-full w-full flex-col overflow-y-auto bg-white">
