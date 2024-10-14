@@ -88,8 +88,6 @@ export function PrimitiveSelect<
       );
     }
 
-    console.log(selected);
-
     return (
       <p className="mb-2">
         {selected
