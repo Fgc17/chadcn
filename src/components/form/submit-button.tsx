@@ -5,7 +5,11 @@ import { useParentForm } from "./form";
 
 export function SubmitButton(
   props: ButtonProps & {
-    hform?: { formState: { isSubmitting: boolean }; id: string };
+    hform?: {
+      id: string;
+      formState: { isSubmitting: boolean };
+      schema: { id: string };
+    };
   }
 ) {
   const _form = useParentForm();
@@ -14,5 +18,12 @@ export function SubmitButton(
 
   const isLoading = form?.formState?.isSubmitting;
 
-  return <Button {...props} loading={isLoading} form={form.id} type="submit" />;
+  return (
+    <Button
+      {...props}
+      loading={isLoading}
+      form={form.schema.id}
+      type="submit"
+    />
+  );
 }
