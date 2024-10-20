@@ -91,7 +91,7 @@ export function PrimitiveSelect<
     return (
       <p className="mb-2">
         {selected
-          ? options.find((o) => selected === o[props.by])?.[labelBy]
+          ? options.find((o) => selected === (o as any)[props.by])?.[labelBy]
           : placeholder}
       </p>
     );
@@ -108,7 +108,11 @@ export function PrimitiveSelect<
       as={React.Fragment}
       value={value}
       onChange={(v) =>
-        setSelected(isArray(v) ? v?.map((o) => o[props.by]) : v[props.by])
+        setSelected(
+          isArray(v)
+            ? v?.map((o) => (o as any)[props.by])
+            : (v as any)[props.by]
+        )
       }
     >
       {({ value }) => (
